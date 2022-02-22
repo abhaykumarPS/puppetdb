@@ -149,9 +149,7 @@ ARG LOGDIR
 ADD https://apt.puppetlabs.com/puppet7-release-bionic.deb /puppet6-release-bionic.deb
 
 RUN dpkg -i /puppet.deb && \
-    rm /puppet.deb 
-RUN dpkg -i /puppet6-release-bionic.deb && \
-    rm /puppet6-release-bionic.deb && \
+    rm /puppet.deb && \
     apt-get update && \
     apt-get install --no-install-recommends -y /puppetdb.deb  && \
     apt-get clean && \
