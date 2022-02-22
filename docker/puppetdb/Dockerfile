@@ -60,7 +60,7 @@ HEALTHCHECK --start-period=5m --interval=10s --timeout=10s --retries=6 CMD ["/he
 ADD https://raw.githubusercontent.com/puppetlabs/pupperware/1c8d5f7fdcf2a81dfaf34f5ee34435cc50526d35/gem/lib/pupperware/compose-services/pe-postgres-custom/00-ssl.sh /ssl.sh
 # hadolint ignore=DL3020
 ADD https://raw.githubusercontent.com/puppetlabs/wtfc/6aa5eef89728cc2903490a618430cc3e59216fa8/wtfc.sh \
-    https://github.com/Yelp/dumb-init/releases/download/v"$DUMB_INIT_VERSION"/dumb-init_"$DUMB_INIT_VERSION"_arm64.deb \
+    https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_arm64.deb \
     docker/puppetdb/docker-entrypoint.sh \
     docker/puppetdb/healthcheck.sh \
     /
@@ -71,7 +71,7 @@ COPY docker/puppetdb/docker-entrypoint.d /docker-entrypoint.d
 RUN apt-get update && \
     apt-get install --no-install-recommends -y ca-certificates curl dnsutils netcat && \
     chmod +x /ssl.sh /wtfc.sh /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
-    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_arm64.deb
+    dpkg -i dumb-init_1.2.5_arm64.deb
 
 ######################################################
 # edge (build from source)
