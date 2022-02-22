@@ -51,27 +51,6 @@ else
 		-i $(hadolint_container) $(hadolint_command) Dockerfile
 endif
 
-build: prep
-	docker buildx build \
-		--load \
-		--pull \
-		--build-arg build_type=$(BUILD_TYPE) \
-		--build-arg vcs_ref=$(vcs_ref) \
-		--build-arg build_date=$(build_date) \
-		--build-arg version=$(VERSION) \
-		--build-arg pupperware_analytics_stream=$(PUPPERWARE_ANALYTICS_STREAM) \
-		--file puppetdb/Dockerfile \
-		--tag $(NAMESPACE)/puppetdb:$(VERSION) \
-		$(PWD)/..
-ifeq ($(IS_LATEST),true)
-	@docker tag $(NAMESPACE)/puppetdb:$(VERSION) $(NAMESPACE)/puppetdb:$(LATEST_VERSION)
-endif
-
-test: prep
-	@bundle install --path $$BUNDLE_PATH --gemfile $$GEMFILE --with test
-	@bundle update
-	@PUPPET_TEST_DOCKER_IMAGE=$(NAMESPACE)/puppetdb:$(VERSION) \
-		bundle exec --gemfile $$GEMFILE rspec spec
 
 push-image: 
 	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
@@ -79,15 +58,6 @@ ifeq ($(IS_LATEST),true)
 	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(LATEST_VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
 endif
 
-push-readme:
-	@docker pull sheogorath/readme-to-dockerhub
-	@docker run --rm \
-		-v $(PWD)/README.md:/data/README.md \
-		-e DOCKERHUB_USERNAME="$(DOCKERHUB_USERNAME)" \
-		-e DOCKERHUB_PASSWORD="$(DOCKERHUB_PASSWORD)" \
-		-e DOCKERHUB_REPO_PREFIX=abhay900 \
-		-e DOCKERHUB_REPO_NAME=puppetdb \
-		sheogorath/readme-to-dockerhub
 
 publish: push-image push-readme
 
