@@ -71,7 +71,7 @@ COPY docker/puppetdb/docker-entrypoint.d /docker-entrypoint.d
 RUN apt-get update && \
    apt-get install --no-install-recommends -y ca-certificates curl dnsutils netcat && \
    chmod +x /ssl.sh /wtfc.sh /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
-#    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_arm64.deb
+   dpkg -i dumb-init_"$DUMB_INIT_VERSION"_arm64.deb
 
 ######################################################
 # edge (build from source)
