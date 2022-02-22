@@ -17,7 +17,7 @@ jobs:
               uses: docker/setup-buildx-action@v1
             - name: Login do docker hub
               env:
-                DOCKERHUB_USERNAMR: ${{ secrets.DOCKERHUB_USERNAME }}
+                DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
                 DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
               run: |
                 docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
@@ -28,5 +28,4 @@ jobs:
                 context: ./docker/puppetdb
                 file: ./docker/puppetdb/Dockerfile
                 platforms: linux/amd64,linux/arm64
-                push: ${{ startsWith(github.ref, 'refs/tags/') }}
                 tags: abhay900/puppetserver:latest
