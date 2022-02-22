@@ -52,7 +52,7 @@ else
 endif
 
 
-push-image: 
+push-image: prep
 	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
 ifeq ($(IS_LATEST),true)
 	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(LATEST_VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
