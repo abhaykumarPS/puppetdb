@@ -146,7 +146,7 @@ ARG pupperware_analytics_stream="dev"
 ARG LOGDIR
 
 # hadolint ignore=DL3020
-ADD deb_uri=https://apt.puppetlabs.com/puppet6-release-bionic.deb /puppet6-release-bionic.deb
+ADD https://apt.puppetlabs.com/puppet6-release-bionic.deb /puppet6-release-bionic.deb
 
 RUN dpkg -i /puppet6-release-bionic.deb && \
     rm /puppet6-release-bionic.deb && \
