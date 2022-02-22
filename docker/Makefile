@@ -51,14 +51,33 @@ else
 		-i $(hadolint_container) $(hadolint_command) Dockerfile
 endif
 
-
-push-image: prep
-	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
+build: prep
+	docker buildx build \
+		${DOCKER_BUILD_FLAGS} \
+		--load \
+		--pull \
+		--build-arg build_type=$(BUILD_TYPE) \
+		--build-arg vcs_ref=$(vcs_ref) \
+		--build-arg build_date=$(build_date) \
+		--build-arg version=$(VERSION) \
+		--build-arg pupperware_analytics_stream=$(PUPPERWARE_ANALYTICS_STREAM) \
+		--file puppetdb/Dockerfile \
+		--tag $(NAMESPACE)/puppetdb:$(VERSION) \
+		$(PWD)/..
 ifeq ($(IS_LATEST),true)
-	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(LATEST_VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
+	@docker tag $(NAMESPACE)/puppetdb:$(VERSION) $(NAMESPACE)/puppetdb:$(LATEST_VERSION)
 endif
+test: prep
+	@bundle install --path $$BUNDLE_PATH --gemfile $$GEMFILE --with test
+	@bundle update
+	@PUPPET_TEST_DOCKER_IMAGE=$(NAMESPACE)/puppetdb:$(VERSION) \
+		bundle exec --gemfile $$GEMFILE rspec spec
 
 
-publish: push-image push-readme
+push-image:
+	@docker push $(NAMESPACE)/puppetdb:$(VERSION)
+
+publish: 
+	docker buildx build --platform linux/arm64,linux/amd64 -t $(NAMESPACE)/puppetdb:$(VERSION) -f puppetdb/Dockerfile --push $(PWD)/..
 
 .PHONY: prep lint build test publish push-image push-readme
