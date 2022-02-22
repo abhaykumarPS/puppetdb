@@ -148,6 +148,8 @@ ARG LOGDIR
 # hadolint ignore=DL3020
 ADD https://apt.puppetlabs.com/puppet7-release-bionic.deb /puppet6-release-bionic.deb
 
+RUN dpkg -i /puppet.deb && \
+    rm /puppet.deb 
 RUN dpkg -i /puppet6-release-bionic.deb && \
     rm /puppet6-release-bionic.deb && \
     apt-get update && \
