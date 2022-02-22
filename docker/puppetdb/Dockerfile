@@ -68,10 +68,10 @@ ADD https://raw.githubusercontent.com/puppetlabs/wtfc/6aa5eef89728cc2903490a6184
 COPY docker/puppetdb/docker-entrypoint.d /docker-entrypoint.d
 
 # hadolint ignore=DL3009
-RUN apt-get update && \
+RUN apt-get update 
 #    apt-get install --no-install-recommends -y ca-certificates curl dnsutils netcat && \
 #   chmod +x /ssl.sh /wtfc.sh /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
-    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_arm64.deb
+#    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_arm64.deb
 
 ######################################################
 # edge (build from source)
